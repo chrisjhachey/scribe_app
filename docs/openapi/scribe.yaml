@@ -1,0 +1,54 @@
+openapi: 3.1.0
+info:
+  title: Scribe App
+  description: |
+    An Application that helps you capture what you are reading and compile notes!
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+    description: localhost
+paths:
+  /text/{uri}:
+    get:
+      summary: Get information related to a Text
+      description: Retrieves the the Text by id
+      operationId: get-text
+      parameters:
+        - name: uri
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/text"
+
+components:
+  # parameters:
+  #   playerIdParam:
+  #     description: represents a unique player
+  #     name: playerId
+  #     in: path
+  #     required: true
+  #     schema:
+  #       $ref: "#/components/schemas/player/id"
+  schemas:
+    errorMessage:
+      type: string
+      maxLength: 256
+      description: A text message describing an error
+    text:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the text
+          example: "The Metaphysics"
+        uri:
+          type: string
+          description: Uique identifier for the text
+          example: "12345"
