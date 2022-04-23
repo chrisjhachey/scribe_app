@@ -38,9 +38,9 @@ func NewServer(port int) *GinServer {
 }
 
 func (s *GinServer) BindScribePrimaryAdaptersToGinServer(uchf factory.UseCaseHandlerFactory) {
-	scribeUseCases := uchf.BuildScribeUseCaseHandler()
+	scribeInteractor := uchf.BuildScribeUseCaseHandler()
 
-	scribe.NewRouterHandler(scribeUseCases).BindGinRoutes(s.Server.Handler.(*gin.Engine))
+	scribe.NewRouter(scribeInteractor).BindGinRoutes(s.Server.Handler.(*gin.Engine))
 }
 
 func (s *GinServer) Start() {

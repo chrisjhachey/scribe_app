@@ -5,15 +5,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-type UseCaseHandlerFactory struct {
-}
+type UseCaseHandlerFactory struct{}
 
-func NewUseCaseHandlerFactory() UseCaseHandlerFactory {
-	return UseCaseHandlerFactory{}
-}
-
-func (uchf UseCaseHandlerFactory) BuildScribeUseCaseHandler() usecase.ScribePrimaryPort {
-	var useCaseHandler usecase.ScribePrimaryPort
+func (uchf UseCaseHandlerFactory) BuildScribeUseCaseHandler() usecase.ScribePrimaryPorts {
+	var useCaseHandler usecase.ScribePrimaryPorts
 	sa := viper.GetString("SECONDARY_ADAPTERS")
 
 	switch sa {

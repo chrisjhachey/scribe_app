@@ -6,8 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (rh RouterHandler) getText(c *gin.Context) {
+func (r Router) getText(c *gin.Context) {
 	fmt.Println("called primary adapter for http getText!")
 
-	rh.useCaseHandler.GetText()
+	r.useCaseHandler.GetText()
 }

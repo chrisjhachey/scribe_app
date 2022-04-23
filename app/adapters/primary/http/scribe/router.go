@@ -5,23 +5,24 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type RouterHandler struct {
-	useCaseHandler usecase.ScribePrimaryPort
+// Router calls the various handlers, and has a copy of the interactor so that it can call the various use cases
+type Router struct {
+	useCaseHandler usecase.ScribePrimaryPorts
 }
 
-func NewRouterHandler(uch usecase.ScribePrimaryPort) RouterHandler {
-	return RouterHandler{
+func NewRouter(uch usecase.ScribePrimaryPorts) Router {
+	return Router{
 		useCaseHandler: uch,
 	}
 }
 
-func (rh RouterHandler) BindGinRoutes(e *gin.Engine) {
+func (r Router) BindGinRoutes(e *gin.Engine) {
 	api := e.Group("/api")
 
-	rh.textRoutes(api)
+	r.textRoutes(api)
 }
 
-func (rh RouterHandler) textRoutes(api *gin.RouterGroup) {
+func (r Router) textRoutes(api *gin.RouterGroup) {
 	text := api.Group("/text")
-	text.GET("/id/:textId", rh.getText)
+	text.GET("/id/:textId", r.getText)
 }
