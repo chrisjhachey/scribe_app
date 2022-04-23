@@ -5,7 +5,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-type ServerConstructor struct {
+type Server struct {
 	UseCaseHandlerFactory factory.UseCaseHandlerFactory
 	GinServer             *GinServer
 	DatabaseURL           string
@@ -13,18 +13,19 @@ type ServerConstructor struct {
 	// Exiter exiter.Exiter
 }
 
-func (sc ServerConstructor) Initialize() {
+func (s Server) Initialize() {
 	primaryPorts := viper.GetStringSlice("PRIMARY_PORTS")
 
 	if len(primaryPorts) > 0 {
 		for _, v := range primaryPorts {
-			if v == "gin" {
-				sc.UseCaseHandlerFactory = factory.NewUseCaseHandlerFactory()
+			// If the http primary port is enabled, we inject the gin server and bind the scribe primary adapters
+			if v == "http" {
+				s.UseCaseHandlerFactory = factory.UseCaseHandlerFactory{}
 
-				if sc.GinServer == nil {
-					sc.GinServer = NewServer(viper.GetInt("PORT"))
-					sc.GinServer.BindScribePrimaryAdaptersToGinServer(sc.UseCaseHandlerFactory)
-					sc.GinServer.Start()
+				if s.GinServer == nil {
+					s.GinServer = NewServer(viper.GetInt("PORT"))
+					s.GinServer.BindScribePrimaryAdaptersToGinServer(s.UseCaseHandlerFactory)
+					s.GinServer.Start()
 				}
 			} else {
 				return

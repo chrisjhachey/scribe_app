@@ -21,8 +21,8 @@ func main() {
 		cancel()
 	}()
 
-	asc := server.ServerConstructor{}
-	asc.Initialize()
+	s := server.Server{}
+	s.Initialize()
 
 	select {
 	case <-sig:

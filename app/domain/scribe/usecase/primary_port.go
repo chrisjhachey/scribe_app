@@ -1,6 +1,6 @@
 package usecase
 
-type ScribePrimaryPort interface {
+type ScribePrimaryPorts interface {
 	TextPrimaryPort
 }
 
