@@ -2,6 +2,6 @@ package memory
 
 import "fmt"
 
-func (ScribeSecondaryInteractor) GetText() {
+func (ScribeMemorySecondaryInteractor) GetText() {
 	fmt.Println("Just got text from repo!")
 }

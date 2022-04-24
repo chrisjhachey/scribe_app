@@ -5,5 +5,5 @@ type ScribePrimaryInteractor struct {
 }
 
 type ScribeSecondaryAdapters struct {
-	TextSecondaryPorts TextPersistanceSecondaryPort
+	ScribeSecondaryPorts ScribeSecondaryPorts
 }

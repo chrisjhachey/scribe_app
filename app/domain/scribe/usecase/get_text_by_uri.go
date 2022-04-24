@@ -7,5 +7,5 @@ import (
 func (si ScribePrimaryInteractor) GetText() {
 	fmt.Println("Called get text in the use case!")
 
-	si.Storage.TextSecondaryPorts.GetText()
+	si.Storage.ScribeSecondaryPorts.GetText()
 }

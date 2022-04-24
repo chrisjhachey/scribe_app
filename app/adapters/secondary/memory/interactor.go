@@ -2,13 +2,14 @@ package memory
 
 import usecase "github.com/christopher.hachey/scribe/app/domain/scribe/usecase"
 
-type ScribeSecondaryInteractor struct {
-	m map[string]string
+type ScribeMemorySecondaryInteractor struct {
+	m *map[string]string
 }
 
 func New() usecase.TextPersistanceSecondaryPort {
-	ssi := ScribeSecondaryInteractor{
-		make(map[string]string),
+	m := make(map[string]string)
+	ssi := ScribeMemorySecondaryInteractor{
+		&m,
 	}
 
 	return ssi
