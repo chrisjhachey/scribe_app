@@ -1,7 +1,5 @@
 package memory
 
-import "fmt"
-
-func (ScribeMemorySecondaryInteractor) GetText() {
-	fmt.Println("Just got text from repo!")
+func (si ScribeMemorySecondaryInteractor) GetText() {
+	si.logger.Info().Msg("Just got text from repo!")
 }

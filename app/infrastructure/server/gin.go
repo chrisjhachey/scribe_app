@@ -11,21 +11,24 @@ import (
 	"github.com/christopher.hachey/scribe/app/adapters/primary/http/scribe"
 	factory "github.com/christopher.hachey/scribe/app/infrastructure/factory"
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
 )
 
 type GinServer struct {
+	Logger *zerolog.Logger
 	Server *http.Server
 	Engine *gin.Engine
 }
 
-func NewServer(port int) *GinServer {
+func NewServer(port int, logger *zerolog.Logger) *GinServer {
 	gin.SetMode(viper.GetString("GIN_MODE"))
 	router := gin.New()
 
 	addr := ":" + strconv.Itoa(port)
 
 	return &GinServer{
+		Logger: logger,
 		Engine: router,
 		Server: &http.Server{
 			Addr:    addr,
@@ -40,11 +43,11 @@ func NewServer(port int) *GinServer {
 func (s *GinServer) BindScribePrimaryAdaptersToGinServer(uchf factory.UseCaseHandlerFactory) {
 	scribeInteractor := uchf.BuildScribeUseCaseHandler()
 
-	scribe.NewRouter(scribeInteractor).BindGinRoutes(s.Server.Handler.(*gin.Engine))
+	scribe.NewRouter(scribeInteractor, s.Logger).BindGinRoutes(s.Server.Handler.(*gin.Engine))
 }
 
 func (s *GinServer) Start() {
-	fmt.Printf("Now Listening on port %s", s.Server.Addr)
+	s.Logger.Info().Msg(fmt.Sprintf("Now Listening on port %s", s.Server.Addr))
 
 	ln, err := net.Listen("tcp", s.Server.Addr)
 

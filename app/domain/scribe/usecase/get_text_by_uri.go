@@ -1,11 +1,7 @@
 package usecase
 
-import (
-	"fmt"
-)
+func (i ScribePrimaryInteractor) GetText() {
+	i.Logger.Info().Msg("Called get text in the use case!")
 
-func (si ScribePrimaryInteractor) GetText() {
-	fmt.Println("Called get text in the use case!")
-
-	si.Storage.ScribeSecondaryPorts.GetText()
+	i.Storage.ScribeSecondaryPorts.GetText()
 }

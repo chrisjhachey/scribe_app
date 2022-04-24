@@ -1,14 +1,19 @@
 package memory
 
-import usecase "github.com/christopher.hachey/scribe/app/domain/scribe/usecase"
+import (
+	usecase "github.com/christopher.hachey/scribe/app/domain/scribe/usecase"
+	"github.com/rs/zerolog"
+)
 
 type ScribeMemorySecondaryInteractor struct {
-	m *map[string]string
+	logger    *zerolog.Logger
+	memoryMap *map[string]string
 }
 
-func New() usecase.TextPersistanceSecondaryPort {
+func New(logger *zerolog.Logger) usecase.TextPersistanceSecondaryPort {
 	m := make(map[string]string)
 	ssi := ScribeMemorySecondaryInteractor{
+		logger,
 		&m,
 	}
 
