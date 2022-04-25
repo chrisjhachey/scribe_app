@@ -1,11 +1,14 @@
 package scribe
 
 import (
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 )
 
 func (r Router) getText(c *gin.Context) {
-	r.logger.Info().Msg("called primary adapter for http getText!")
+	uri := c.Params.ByName("textURI")
+	r.logger.Info().Msg(fmt.Sprintf("called primary adapter for http getText with uri %s", uri))
 
-	r.useCaseHandler.GetText()
+	r.useCaseHandler.GetText(uri)
 }

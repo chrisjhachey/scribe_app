@@ -27,5 +27,6 @@ func (r Router) BindGinRoutes(e *gin.Engine) {
 
 func (r Router) textRoutes(api *gin.RouterGroup) {
 	text := api.Group("/text")
-	text.GET("/id/:textId", r.getText)
+	text.GET("/uri/:textURI", r.getText)
+	text.POST("", r.postText)
 }

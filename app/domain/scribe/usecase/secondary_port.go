@@ -5,5 +5,6 @@ type ScribeSecondaryPorts interface {
 }
 
 type TextPersistanceSecondaryPort interface {
-	GetText()
+	GetText(textURI string)
+	PostText()
 }

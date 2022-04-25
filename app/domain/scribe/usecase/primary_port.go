@@ -5,5 +5,6 @@ type ScribePrimaryPorts interface {
 }
 
 type TextPrimaryPort interface {
-	GetText()
+	GetText(textURI string)
+	PostText()
 }
