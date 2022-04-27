@@ -48,6 +48,10 @@ components:
           type: string
           description: The name of the text
           example: "The Metaphysics"
+        author:
+          type: string
+          description: The author of the text
+          example: "Aristotle"
         uri:
           type: string
           description: Uique identifier for the text

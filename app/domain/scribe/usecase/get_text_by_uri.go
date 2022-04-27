@@ -1,11 +1,15 @@
 package usecase
 
-import (
-	"fmt"
-)
+import "github.com/christopher.hachey/scribe/app/domain/scribe/model"
 
-func (si ScribePrimaryInteractor) GetText() {
-	fmt.Println("Called get text in the use case!")
+func (i ScribePrimaryInteractor) GetText(textURI string) (model.Text, error) {
+	i.Logger.Info().Msg("Called get text in the use case!")
 
-	si.Storage.TextSecondaryPorts.GetText()
+	text, err := i.Storage.ScribeSecondaryPorts.GetText(textURI)
+
+	if err != nil {
+		return text, err
+	}
+
+	return text, nil
 }
