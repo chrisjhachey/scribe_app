@@ -5,9 +5,12 @@ package model
 
 // Text defines model for text.
 type Text struct {
+	// The author of the text
+	Author *string `json:"author,omitempty"`
+
 	// The name of the text
 	Name *string `json:"name,omitempty"`
 
-	// uique identifier for the text
+	// Uique identifier for the text
 	Uri *string `json:"uri,omitempty"`
 }
