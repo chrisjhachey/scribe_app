@@ -1,11 +1,11 @@
-openapi: 3.1.0
+openapi: 3.0.0
 info:
   title: Scribe App
   description: |
     An Application that helps you capture what you are reading and compile notes!
   version: 1.0.0
 servers:
-  - url: http://localhost:8000
+  - url: http://localhost:3030/api
     description: localhost
 paths:
   /text/{uri}:
@@ -26,33 +26,49 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/text"
+  /text:
+    post:
+      summary: Post information related to a new Text
+      description: Creates a new Text
+      operationId: post-text
+      requestBody:
+        description: Pet to add to the store
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/newText"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/text"
 
 components:
-  # parameters:
-  #   playerIdParam:
-  #     description: represents a unique player
-  #     name: playerId
-  #     in: path
-  #     required: true
-  #     schema:
-  #       $ref: "#/components/schemas/player/id"
   schemas:
     errorMessage:
       type: string
       maxLength: 256
       description: A text message describing an error
     text:
-      type: object
+      allOf:
+        - $ref: "#/components/schemas/newText"
+        - required:
+            - uri
+          properties:
+            uri:
+              type: string
+              description: Unique id of the Text
+
+    newText:
+      required:
+        - name
       properties:
         name:
           type: string
-          description: The name of the text
-          example: "The Metaphysics"
+          description: Name of the Text
         author:
           type: string
-          description: The author of the text
-          example: "Aristotle"
-        uri:
-          type: string
-          description: Uique identifier for the text
-          example: "12345"
+          description: Author of the Text

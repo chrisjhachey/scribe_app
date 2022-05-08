@@ -2,14 +2,11 @@ package server
 
 import (
 	"crypto/tls"
+	"fmt"
 	"net"
 	"net/http"
 	"strconv"
 
-	"fmt"
-
-	"github.com/christopher.hachey/scribe/app/adapters/primary/http/scribe"
-	factory "github.com/christopher.hachey/scribe/app/infrastructure/factory"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
@@ -21,14 +18,13 @@ type GinServer struct {
 	Engine *gin.Engine
 }
 
-func NewServer(port int, logger *zerolog.Logger) *GinServer {
+func NewServer(port int) *GinServer {
 	gin.SetMode(viper.GetString("GIN_MODE"))
 	router := gin.New()
 
 	addr := ":" + strconv.Itoa(port)
 
 	return &GinServer{
-		Logger: logger,
 		Engine: router,
 		Server: &http.Server{
 			Addr:    addr,
@@ -40,14 +36,8 @@ func NewServer(port int, logger *zerolog.Logger) *GinServer {
 	}
 }
 
-func (s *GinServer) BindScribePrimaryAdaptersToGinServer(uchf factory.UseCaseHandlerFactory) {
-	scribeInteractor := uchf.BuildScribeUseCaseHandler()
-
-	scribe.NewRouter(scribeInteractor, s.Logger).BindGinRoutes(s.Server.Handler.(*gin.Engine))
-}
-
 func (s *GinServer) Start() {
-	s.Logger.Info().Msg(fmt.Sprintf("Now Listening on port %s", s.Server.Addr))
+	//s.Logger.Info().Msg(fmt.Sprintf("Now Listening on port %s", s.Server.Addr))
 
 	ln, err := net.Listen("tcp", s.Server.Addr)
 
