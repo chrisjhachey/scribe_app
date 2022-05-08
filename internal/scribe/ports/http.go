@@ -1,25 +1,28 @@
 package ports
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/christopher.hachey/scribe/internal/scribe/app"
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog"
 )
 
 type RouterHandler struct {
 	service app.ScribeService
+	logger  *zerolog.Logger
 }
 
-func NewRouterHandler(service app.ScribeService) RouterHandler {
+func NewRouterHandler(service app.ScribeService, logger *zerolog.Logger) RouterHandler {
 	return RouterHandler{
 		service: service,
+		logger:  logger,
 	}
 }
 
 func (rh RouterHandler) GetText(c *gin.Context, uri string) {
-	fmt.Println("successfully called get text router handler")
+	rh.logger.Info().Msg("successfully called get text router handler")
+
 	text, err := rh.service.GetText(uri)
 
 	if err != nil {
@@ -38,7 +41,8 @@ func (rh RouterHandler) GetText(c *gin.Context, uri string) {
 }
 
 func (rh RouterHandler) PostText(c *gin.Context) {
-	fmt.Println("successfully called post text router handler")
+	rh.logger.Info().Msg("successfully called post text router handler")
+
 	nt := NewText{}
 	err := c.BindJSON(&nt)
 

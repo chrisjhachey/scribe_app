@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"os"
 	"os/signal"
 
@@ -12,7 +11,7 @@ import (
 	"github.com/christopher.hachey/scribe/internal/scribe/app"
 	"github.com/christopher.hachey/scribe/internal/scribe/domain/scribe"
 	"github.com/christopher.hachey/scribe/internal/scribe/ports"
-	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
 )
 
@@ -28,31 +27,31 @@ func main() {
 		cancel()
 	}()
 
+	writer := zerolog.ConsoleWriter{Out: os.Stderr}
+	logger := zerolog.New(writer).With().Timestamp().Logger()
+
 	// Inject adapters
 	var repo scribe.Repository
 
 	switch viper.GetString("SECONDARY_ADAPTERS") {
 	case "memory":
-		repo = adapters.NewScribeMemoryAdapter()
+		repo = adapters.NewScribeMemoryAdapter(&logger)
 	case "pgsql":
 
 	}
 
-	scribe := app.NewScribeService(repo)
+	scribe := app.NewScribeService(repo, &logger)
 
-	rh := ports.NewRouterHandler(scribe)
+	rh := ports.NewRouterHandler(scribe, &logger)
 
 	ginServer := server.NewServer(viper.GetInt("PORT"))
 
 	ports.RegisterHandlersWithOptions(ginServer.Engine, rh, ports.GinServerOptions{
-		BaseURL: "/api",
+		BaseURL:     "/api",
 		Middlewares: []ports.MiddlewareFunc{
-			func(c *gin.Context) {
-				fmt.Println("I'm Middleware 1!")
-			},
-			func(c *gin.Context) {
-				fmt.Println("I'm Middleware 2!")
-			},
+			// func(c *gin.Context) {
+			// 	fmt.Println("I'm Middleware 1!")
+			// }
 		},
 	})
 
