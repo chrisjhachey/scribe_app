@@ -8,12 +8,10 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rs/zerolog"
 	"github.com/spf13/viper"
 )
 
 type GinServer struct {
-	Logger *zerolog.Logger
 	Server *http.Server
 	Engine *gin.Engine
 }

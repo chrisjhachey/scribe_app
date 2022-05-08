@@ -2,31 +2,33 @@ package adapters
 
 import (
 	"errors"
-	"fmt"
 	"sync"
 
 	"github.com/christopher.hachey/scribe/internal/scribe/domain/scribe"
+	"github.com/rs/zerolog"
 )
 
 type ScribeMemoryAdapter struct {
 	memoryMap map[string]interface{}
 	lock      *sync.RWMutex
+	logger    *zerolog.Logger
 }
 
-func NewScribeMemoryAdapter() *ScribeMemoryAdapter {
+func NewScribeMemoryAdapter(logger *zerolog.Logger) *ScribeMemoryAdapter {
 	m := make(map[string]interface{})
 
 	return &ScribeMemoryAdapter{
 		memoryMap: m,
 		lock:      &sync.RWMutex{},
+		logger:    logger,
 	}
 }
 
 func (sma ScribeMemoryAdapter) GetText(uri string) (*scribe.Text, error) {
+	sma.logger.Info().Msg("successfully called get text adapter!")
+
 	sma.lock.RLock() // blocks for reading
 	defer sma.lock.RUnlock()
-
-	fmt.Println("successfully called get text adapter!")
 
 	record, ok := sma.memoryMap[uri]
 
@@ -45,10 +47,10 @@ func (sma ScribeMemoryAdapter) GetText(uri string) (*scribe.Text, error) {
 }
 
 func (sma ScribeMemoryAdapter) PostText(text *scribe.Text) (*scribe.Text, error) {
+	sma.logger.Info().Msg("successfully called post text adapter!")
+
 	sma.lock.Lock() // blocks for writing
 	defer sma.lock.Unlock()
-
-	fmt.Println("successfully called post text adapter!")
 
 	sma.memoryMap[text.URI] = *text
 
